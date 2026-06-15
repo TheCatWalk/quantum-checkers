@@ -28,7 +28,7 @@ export class BootScene extends Phaser.Scene {
       align: 'center',
     });
     glowText.setOrigin(0.5);
-    glowText.setAlpha(0.3);
+    glowText.setAlpha(0.2);
     titleGroup.add(glowText);
 
     // Main text
@@ -36,9 +36,9 @@ export class BootScene extends Phaser.Scene {
       fontFamily: 'Arial, sans-serif',
       fontSize: '96px',
       fontStyle: 'bold',
-      color: '#00ffff',
-      stroke: '#0099ff',
-      strokeThickness: 2,
+      color: '#ffffff',
+      stroke: '#00ffff',
+      strokeThickness: 3,
       align: 'center',
       shadow: {
         offsetX: 0,
