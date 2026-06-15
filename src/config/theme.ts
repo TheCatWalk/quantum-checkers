@@ -3,7 +3,7 @@ export const THEME = {
     // ── Aurora palette — deep night-sky void with shifting teal/violet glow ──
     boardLight:     0x070a16,   // non-playable squares — recede into the void
     boardDark:      0x223d70,   // playable squares — raised glass tiles
-    gridLine:       0x3a7a8a,   // holographic grid lines
+    gridLine:       0x00ffff,   // neon cyan grid lines — bright and vibrant
     boardFrame:     0x46e0ff,   // neon frame — bright cyan glow
 
     playerA:        0x3df5c4,   // teal energy
@@ -23,9 +23,9 @@ export const THEME = {
     ghost:      0.45,
     legalHint:  0.30,
     linkBase:   0.80,
-    boardTile:  0.15,   // playable-cell fill — very transparent, glassy
-    boardVoid:  0.03,   // non-playable-cell fill — almost invisible
-    gridLine:   0.35,   // reduced for ghostly appearance
+    boardTile:  0.35,   // playable-cell fill — clearer while showing aurora
+    boardVoid:  0.12,   // non-playable-cell fill — visible but subtle
+    gridLine:   0.6,    // brighter grid for clarity
   },
   durations: {
     pieceMove:      180,  // ms

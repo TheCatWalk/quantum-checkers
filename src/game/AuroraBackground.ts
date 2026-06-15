@@ -11,8 +11,8 @@ export class AuroraBackground {
   }
 
   private createAurora(): void {
-    // Fullscreen quad geometry
-    const geometry = new THREE.PlaneGeometry(100, 100);
+    // Fullscreen quad - make it huge to cover entire viewport
+    const geometry = new THREE.PlaneGeometry(200, 200);
 
     // Custom shader material for aurora
     const material = new THREE.ShaderMaterial({
@@ -87,12 +87,13 @@ export class AuroraBackground {
           gl_FragColor = vec4(col, 1.0);
         }
       `,
-      side: THREE.BackSide,
+      side: THREE.FrontSide,
     });
 
     this.mesh = new THREE.Mesh(geometry, material);
-    this.mesh.position.z = -50;
+    this.mesh.position.z = -10;  // Closer so it's visible
     this.scene.add(this.mesh);
+    console.log('Aurora added to scene');
   }
 
   update(): void {

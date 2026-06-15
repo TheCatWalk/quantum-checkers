@@ -4,7 +4,7 @@ export class Board {
   private scene: THREE.Scene;
   private group!: THREE.Group;
   private boardSize = 8;
-  private cellSize = 1;
+  private cellSize = 2.2;  // Even bigger board
 
   constructor(scene: THREE.Scene) {
     this.scene = scene;
@@ -13,70 +13,48 @@ export class Board {
 
   private createBoard(): void {
     this.group = new THREE.Group();
-
-    // Create cells
     const boardDim = this.boardSize * this.cellSize;
-    for (let row = 0; row < this.boardSize; row++) {
-      for (let col = 0; col < this.boardSize; col++) {
-        const isPlayable = (row + col) % 2 === 0;
-        const color = isPlayable ? 0x223d70 : 0x070a16;
-        const opacity = isPlayable ? 0.15 : 0.03;
+    const half = boardDim / 2;
 
-        const geometry = new THREE.PlaneGeometry(this.cellSize, this.cellSize);
-        const material = new THREE.MeshStandardMaterial({
-          color,
-          transparent: true,
-          opacity,
-          emissive: color,
-          emissiveIntensity: 0.1,
-        });
-
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.position.x = col * this.cellSize - boardDim / 2;
-        mesh.position.y = row * this.cellSize - boardDim / 2;
-        this.group.add(mesh);
-      }
-    }
-
-    // Add grid lines
-    const gridLines = new THREE.Group();
+    // Draw grid lines - 9 lines each direction for 8x8 grid
     const gridColor = 0x3a7a8a;
     for (let i = 0; i <= this.boardSize; i++) {
-      const pos = i * this.cellSize - boardDim / 2;
+      const pos = i * this.cellSize - half;
 
       // Horizontal line
       const hGeom = new THREE.BufferGeometry();
       hGeom.setAttribute('position', new THREE.BufferAttribute(
-        new Float32Array([
-          -boardDim / 2, pos, 0,
-          boardDim / 2, pos, 0,
-        ]),
+        new Float32Array([-half, pos, 0, half, pos, 0]),
         3
       ));
-      const hLine = new THREE.Line(hGeom, new THREE.LineBasicMaterial({ color: gridColor, opacity: 0.35, transparent: true }));
-      gridLines.add(hLine);
+      const hLine = new THREE.Line(hGeom, new THREE.LineBasicMaterial({ color: gridColor, opacity: 0.4 }));
+      this.group.add(hLine);
 
       // Vertical line
       const vGeom = new THREE.BufferGeometry();
       vGeom.setAttribute('position', new THREE.BufferAttribute(
-        new Float32Array([
-          pos, -boardDim / 2, 0,
-          pos, boardDim / 2, 0,
-        ]),
+        new Float32Array([pos, -half, 0, pos, half, 0]),
         3
       ));
-      const vLine = new THREE.Line(vGeom, new THREE.LineBasicMaterial({ color: gridColor, opacity: 0.35, transparent: true }));
-      gridLines.add(vLine);
+      const vLine = new THREE.Line(vGeom, new THREE.LineBasicMaterial({ color: gridColor, opacity: 0.4 }));
+      this.group.add(vLine);
     }
-    this.group.add(gridLines);
 
-    // Add border frame
-    const frameGeom = new THREE.EdgesGeometry(new THREE.PlaneGeometry(boardDim, boardDim));
-    const frameWireframe = new THREE.LineSegments(frameGeom, new THREE.LineBasicMaterial({ color: 0x46e0ff, opacity: 0.9, transparent: true, linewidth: 3 }));
+    // Add neon border
+    const frameGeom = new THREE.BufferGeometry();
+    frameGeom.setAttribute('position', new THREE.BufferAttribute(
+      new Float32Array([
+        -half, -half, 0,
+        half, -half, 0,
+        half, half, 0,
+        -half, half, 0,
+      ]),
+      3
+    ));
+    frameGeom.setIndex([0, 1, 1, 2, 2, 3, 3, 0]);
+    const frameWireframe = new THREE.LineSegments(frameGeom, new THREE.LineBasicMaterial({ color: 0x46e0ff, linewidth: 2 }));
     this.group.add(frameWireframe);
 
-    // Slight tilt for 3D perspective
-    this.group.rotation.x = 0.1;
     this.scene.add(this.group);
   }
 
