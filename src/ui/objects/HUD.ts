@@ -15,53 +15,54 @@ export class HUD {
   private readonly hintText:   Phaser.GameObjects.Text;
   private readonly scene: Phaser.Scene;
 
-  constructor(scene: Phaser.Scene, canvasWidth: number, _boardConfig: BoardConfig) {
+  constructor(scene: Phaser.Scene, canvasWidth: number, boardConfig: BoardConfig) {
     this.scene = scene;
+    const cx = canvasWidth / 2;
+    const boardCenterY = boardConfig.offsetY + (boardConfig.boardSize * boardConfig.cellSize) / 2;
+    const boardRight = boardConfig.offsetX + boardConfig.boardSize * boardConfig.cellSize;
 
-    // Top-left: Turn indicator
-    this.turnText = scene.add.text(20, 20, '', {
+    // Top center: Turn indicator (large and prominent)
+    this.turnText = scene.add.text(cx, 25, '', {
       ...BASE_STYLE,
-      fontSize: '18px',
+      fontSize: '32px',
       fontStyle: 'bold',
       color: '#00ffff',
-    }).setOrigin(0, 0);
-    this.createCornerFrame(20, 20, 300, 60);
+    }).setOrigin(0.5, 0);
+    this.createFrameBox(cx - 280, 15, 560, 50, 0x00ffff);
 
-    // Top-right: Pairs/entangle status
-    this.pairsText = scene.add.text(canvasWidth - 20, 20, '', {
-      ...BASE_STYLE,
-      fontSize: '13px',
-      color: '#ffff00',
-    }).setOrigin(1, 0);
-    this.createCornerFrame(canvasWidth - 320, 20, 300, 60);
-
-    // Bottom-left: Pieces count
-    this.piecesText = scene.add.text(20, scene.scale.height - 20, '', {
+    // Right side: Pieces and captures (vertically centered on board)
+    this.piecesText = scene.add.text(boardRight + 40, boardCenterY - 40, '', {
       ...BASE_STYLE,
       fontSize: '16px',
       color: '#00ffff',
-    }).setOrigin(0, 1);
-    this.createCornerFrame(20, scene.scale.height - 80, 300, 60);
+    }).setOrigin(0, 0);
 
-    // Bottom-right: Controls hint
-    this.hintText = scene.add.text(canvasWidth - 20, scene.scale.height - 20, '', {
+    // Pairs/entangle info (below pieces)
+    this.pairsText = scene.add.text(boardRight + 40, boardCenterY + 30, '', {
       ...BASE_STYLE,
-      fontSize: '12px',
+      fontSize: '14px',
+      color: '#ffff00',
+    }).setOrigin(0, 0);
+
+    // Bottom center: Controls and tutorial (larger and more readable)
+    this.hintText = scene.add.text(cx, scene.scale.height - 60, '', {
+      ...BASE_STYLE,
+      fontSize: '16px',
       color: '#aaaacc',
-    }).setOrigin(1, 1);
-    this.createCornerFrame(canvasWidth - 450, scene.scale.height - 80, 430, 60);
+    }).setOrigin(0.5, 0);
+    this.createFrameBox(cx - 420, scene.scale.height - 75, 840, 60, 0xaaaacc);
   }
 
-  private createCornerFrame(x: number, y: number, w: number, h: number): void {
+  private createFrameBox(x: number, y: number, w: number, h: number, color: number): void {
     const graphics = this.scene.add.graphics();
-    const cornerSize = 20;
+    const cornerSize = 25;
 
     // Main frame
-    graphics.lineStyle(1, 0x00ffff, 0.5);
+    graphics.lineStyle(2, color, 0.6);
     graphics.strokeRect(x, y, w, h);
 
     // Corner brackets
-    graphics.lineStyle(2, 0x00ffff, 0.7);
+    graphics.lineStyle(3, color, 0.8);
     // Top-left
     graphics.lineBetween(x, y, x + cornerSize, y);
     graphics.lineBetween(x, y, x, y + cornerSize);
@@ -78,10 +79,10 @@ export class HUD {
 
   setEntangleMode(on: boolean): void {
     if (on) {
-      this.hintText.setText('ENTANGLE: safe (E) • gamble (R) • exit (E)');
+      this.hintText.setText('ENTANGLE MODE ACTIVE  →  Left-click: SAFE pair (blue)  •  Right-click: GAMBLE pair (gold)  •  Press E to exit');
       this.hintText.setStyle({ color: '#88aaff' });
     } else {
-      this.hintText.setText('MOVE: click • CAPTURE: click • ENTANGLE: E');
+      this.hintText.setText('Click a piece to MOVE or CAPTURE  •  Right-click to ATTACK  •  Press E to enter ENTANGLE mode');
       this.hintText.setStyle({ color: '#aaaacc' });
     }
   }
@@ -89,27 +90,27 @@ export class HUD {
   update(state: GameState): void {
     if (state.phase === 'game_over') {
       this.turnText.setText(
-        state.winner !== null ? `>> PLAYER ${state.winner + 1} WINS <<` : '>> DRAW <<',
+        state.winner !== null ? `GAME OVER - PLAYER ${state.winner + 1} WINS` : 'GAME OVER - DRAW',
       );
       this.pairsText.setText('');
-      this.hintText.setText('');
+      this.hintText.setText('Press SPACE to return to menu');
     } else {
-      const player = state.turn === 0 ? '1' : '2';
-      this.turnText.setText(`[PLAYER ${player}]`);
+      const playerName = state.turn === 0 ? 'LIGHT' : 'DARK';
+      this.turnText.setText(`PLAYER ${state.turn + 1} (${playerName}) - YOUR TURN`);
 
-      // Pair summary - compact format
+      // Pair summary - verbose format
       const p0Pairs = state.pairs.filter(p => p.owner === 0).length;
       const p1Pairs = state.pairs.filter(p => p.owner === 1).length;
+      let pairInfo = `ENTANGLED PAIRS - P1: ${p0Pairs}  P2: ${p1Pairs}`;
       if (state.pairs.length > 0) {
         const pairStr = state.pairs.map(p =>
-          `${p.pairType === 'safe' ? '●' : '◆'}${p.turnsRemaining}`
-        ).join('|');
-        this.pairsText.setText(`PAIRS\nP1: ${p0Pairs} P2: ${p1Pairs}\n${pairStr}`);
-      } else {
-        this.pairsText.setText('PAIRS\nP1: 0 P2: 0');
+          `${p.pairType === 'safe' ? '●' : '◆'} ${p.turnsRemaining}t`
+        ).join('  ');
+        pairInfo += `\n${pairStr}`;
       }
+      this.pairsText.setText(pairInfo);
 
-      this.hintText.setText('MOVE: click • CAPTURE: click • ENTANGLE: E');
+      this.hintText.setText('Click a piece to MOVE or CAPTURE  •  Right-click to ATTACK  •  Press E to enter ENTANGLE mode');
       this.hintText.setStyle({ color: '#aaaacc' });
     }
 
@@ -119,6 +120,8 @@ export class HUD {
     // Each pair owner has their piece split into 2 ghosts (not counted above), so add back 1 per pair.
     const p0Total = p0 + state.pairs.filter(p => p.owner === 0).length;
     const p1Total = p1 + state.pairs.filter(p => p.owner === 1).length;
-    this.piecesText.setText(`PIECES\nP1: ${p0Total}\nP2: ${p1Total}`);
+    const captured0 = 12 - p1Total;
+    const captured1 = 12 - p0Total;
+    this.piecesText.setText(`PIECES REMAINING\nPlayer 1: ${p0Total} / 12\nPlayer 2: ${p1Total} / 12\n\nCAPTURED\nPlayer 1: ${captured1}\nPlayer 2: ${captured0}`);
   }
 }
