@@ -55,23 +55,14 @@ export class BootScene extends Phaser.Scene {
       ease: 'Power2.Out',
     });
 
-    // Subtitle/description box
-    const subtitleBox = this.add.graphics();
-    const subtitleBoxX = cx - 450;
-    const subtitleBoxY = cy + 20;
-    const subtitleBoxWidth = 900;
-    const subtitleBoxHeight = 80;
+    // Subtitle/description - minimal design with breathing room
+    const subtitleLine1 = this.add.graphics();
+    subtitleLine1.lineStyle(1, 0x00ffff, 0.3);
+    subtitleLine1.lineBetween(cx - 300, cy + 40, cx + 300, cy + 40);
 
-    // Dark background fill
-    subtitleBox.fillStyle(0x000000, 0.3);
-    subtitleBox.fillRect(subtitleBoxX, subtitleBoxY, subtitleBoxWidth, subtitleBoxHeight);
-
-    subtitleBox.lineStyle(1, 0x00ffff, 0.4);
-    subtitleBox.strokeRect(subtitleBoxX, subtitleBoxY, subtitleBoxWidth, subtitleBoxHeight);
-
-    const subtitle = this.add.text(cx, cy + 60, 'A Game of Quantum Strategy', {
+    const subtitle = this.add.text(cx, cy + 70, 'A Game of Quantum Strategy', {
       fontFamily: 'monospace',
-      fontSize: '22px',
+      fontSize: '18px',
       color: '#00ffff',
       align: 'center',
     });
@@ -84,6 +75,10 @@ export class BootScene extends Phaser.Scene {
       delay: 300,
       ease: 'Power2.Out',
     });
+
+    const subtitleLine2 = this.add.graphics();
+    subtitleLine2.lineStyle(1, 0x00ffff, 0.3);
+    subtitleLine2.lineBetween(cx - 300, cy + 100, cx + 300, cy + 100);
 
     // Input prompt box
     const promptBox = this.add.graphics();
