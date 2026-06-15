@@ -22,16 +22,16 @@ export class HUD {
     const boardRight = boardConfig.offsetX + boardConfig.boardSize * boardConfig.cellSize;
 
     // Top center: Turn indicator (large and prominent)
-    this.turnText = scene.add.text(cx, 25, '', {
+    this.turnText = scene.add.text(cx, 32, '', {
       ...BASE_STYLE,
-      fontSize: '32px',
+      fontSize: '28px',
       fontStyle: 'bold',
       color: '#00ffff',
-    }).setOrigin(0.5, 0);
-    this.createFrameBox(cx - 280, 15, 560, 50, 0x00ffff);
+    }).setOrigin(0.5, 0.5);
+    this.createFrameBox(cx - 280, 12, 560, 50, 0x00ffff, false);
 
     // Right side: Pieces and captures (vertically centered on board)
-    this.piecesText = scene.add.text(boardRight + 35, boardCenterY - 80, '', {
+    this.piecesText = scene.add.text(boardRight + 40, boardCenterY - 90, '', {
       ...BASE_STYLE,
       fontSize: '18px',
       fontStyle: 'bold',
@@ -39,24 +39,35 @@ export class HUD {
     }).setOrigin(0, 0);
 
     // Pairs/entangle info (below pieces with good spacing)
-    this.pairsText = scene.add.text(boardRight + 35, boardCenterY + 40, '', {
+    this.pairsText = scene.add.text(boardRight + 40, boardCenterY + 50, '', {
       ...BASE_STYLE,
       fontSize: '16px',
       color: '#ffff00',
     }).setOrigin(0, 0);
 
+    // Add dark background for right side info
+    const rightBg = this.scene.add.graphics();
+    rightBg.fillStyle(0x000000, 0.25);
+    rightBg.fillRect(boardRight + 25, boardCenterY - 110, 200, 200);
+
     // Bottom center: Controls and tutorial (larger and more readable)
     this.hintText = scene.add.text(cx, scene.scale.height - 65, '', {
       ...BASE_STYLE,
-      fontSize: '18px',
+      fontSize: '16px',
       color: '#aaaacc',
     }).setOrigin(0.5, 0.5);
-    this.createFrameBox(cx - 450, scene.scale.height - 85, 900, 70, 0xaaaacc);
+    this.createFrameBox(cx - 450, scene.scale.height - 90, 900, 60, 0xaaaacc, false);
   }
 
-  private createFrameBox(x: number, y: number, w: number, h: number, color: number): void {
+  private createFrameBox(x: number, y: number, w: number, h: number, color: number, withFill = false): void {
     const graphics = this.scene.add.graphics();
     const cornerSize = 25;
+
+    // Dark background fill (optional)
+    if (withFill) {
+      graphics.fillStyle(0x000000, 0.2);
+      graphics.fillRect(x, y, w, h);
+    }
 
     // Main frame
     graphics.lineStyle(2, color, 0.6);
