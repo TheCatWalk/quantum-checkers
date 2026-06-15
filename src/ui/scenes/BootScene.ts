@@ -24,7 +24,7 @@ export class BootScene extends Phaser.Scene {
     const titleBoxHeight = 200;
     const titleBox = this.add.graphics();
     const titleBoxX = cx - titleBoxWidth / 2;
-    const titleBoxY = cy - titleBoxHeight / 2 - 60;
+    const titleBoxY = cy - titleBoxHeight / 2 - 120;
 
     // Dark background fill
     titleBox.fillStyle(0x000000, 0.3);
@@ -37,13 +37,13 @@ export class BootScene extends Phaser.Scene {
     this.drawCornerBrackets(titleBox, titleBoxX, titleBoxY, titleBoxWidth, titleBoxHeight);
 
     // Main title text
-    const mainText = this.add.text(cx, cy - 60, 'QUANTUM CHECKERS', {
+    const mainText = this.add.text(cx, cy - 120, 'QUANTUM CHECKERS', {
       fontFamily: 'monospace',
       fontSize: '72px',
       fontStyle: 'bold',
-      color: '#00ffff',
+      color: '#ffffff',
       align: 'center',
-      stroke: '#ffffff',
+      stroke: '#00ffff',
       strokeThickness: 2,
     });
     mainText.setOrigin(0.5, 0.5);
