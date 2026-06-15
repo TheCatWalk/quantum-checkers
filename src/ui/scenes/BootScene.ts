@@ -23,20 +23,28 @@ export class BootScene extends Phaser.Scene {
     const titleBoxWidth = 900;
     const titleBoxHeight = 200;
     const titleBox = this.add.graphics();
+    const titleBoxX = cx - titleBoxWidth / 2;
+    const titleBoxY = cy - titleBoxHeight / 2 - 60;
+
+    // Dark background fill
+    titleBox.fillStyle(0x000000, 0.3);
+    titleBox.fillRect(titleBoxX, titleBoxY, titleBoxWidth, titleBoxHeight);
 
     titleBox.lineStyle(2, 0x00ffff, 0.6);
-    titleBox.strokeRect(cx - titleBoxWidth / 2, cy - titleBoxHeight / 2 - 60, titleBoxWidth, titleBoxHeight);
+    titleBox.strokeRect(titleBoxX, titleBoxY, titleBoxWidth, titleBoxHeight);
 
     // Corner brackets (NieR style)
-    this.drawCornerBrackets(titleBox, cx - titleBoxWidth / 2, cy - titleBoxHeight / 2 - 60, titleBoxWidth, titleBoxHeight);
+    this.drawCornerBrackets(titleBox, titleBoxX, titleBoxY, titleBoxWidth, titleBoxHeight);
 
     // Main title text
     const mainText = this.add.text(cx, cy - 60, 'QUANTUM CHECKERS', {
       fontFamily: 'monospace',
-      fontSize: '64px',
+      fontSize: '72px',
       fontStyle: 'bold',
-      color: '#ffffff',
+      color: '#00ffff',
       align: 'center',
+      stroke: '#ffffff',
+      strokeThickness: 2,
     });
     mainText.setOrigin(0.5, 0.5);
     mainText.setAlpha(0);
@@ -49,12 +57,21 @@ export class BootScene extends Phaser.Scene {
 
     // Subtitle/description box
     const subtitleBox = this.add.graphics();
+    const subtitleBoxX = cx - 450;
+    const subtitleBoxY = cy + 20;
+    const subtitleBoxWidth = 900;
+    const subtitleBoxHeight = 80;
+
+    // Dark background fill
+    subtitleBox.fillStyle(0x000000, 0.3);
+    subtitleBox.fillRect(subtitleBoxX, subtitleBoxY, subtitleBoxWidth, subtitleBoxHeight);
+
     subtitleBox.lineStyle(1, 0x00ffff, 0.4);
-    subtitleBox.strokeRect(cx - 400, cy + 30, 800, 60);
+    subtitleBox.strokeRect(subtitleBoxX, subtitleBoxY, subtitleBoxWidth, subtitleBoxHeight);
 
     const subtitle = this.add.text(cx, cy + 60, 'A Game of Quantum Strategy', {
       fontFamily: 'monospace',
-      fontSize: '14px',
+      fontSize: '22px',
       color: '#00ffff',
       align: 'center',
     });
@@ -70,12 +87,21 @@ export class BootScene extends Phaser.Scene {
 
     // Input prompt box
     const promptBox = this.add.graphics();
-    promptBox.lineStyle(1, 0xffff00, 0.5);
-    promptBox.strokeRect(cx - 250, cy + 130, 500, 50);
+    const promptBoxX = cx - 320;
+    const promptBoxY = cy + 130;
+    const promptBoxWidth = 640;
+    const promptBoxHeight = 70;
 
-    const playPrompt = this.add.text(cx, cy + 155, '>> PRESS SPACE OR CLICK TO START <<', {
+    // Dark background fill
+    promptBox.fillStyle(0x000000, 0.3);
+    promptBox.fillRect(promptBoxX, promptBoxY, promptBoxWidth, promptBoxHeight);
+
+    promptBox.lineStyle(1, 0xffff00, 0.5);
+    promptBox.strokeRect(promptBoxX, promptBoxY, promptBoxWidth, promptBoxHeight);
+
+    const playPrompt = this.add.text(cx, cy + 165, '>> PRESS SPACE OR CLICK TO START <<', {
       fontFamily: 'monospace',
-      fontSize: '12px',
+      fontSize: '18px',
       color: '#ffff00',
       fontStyle: 'bold',
       align: 'center',
