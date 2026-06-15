@@ -31,26 +31,27 @@ export class HUD {
     this.createFrameBox(cx - 280, 15, 560, 50, 0x00ffff);
 
     // Right side: Pieces and captures (vertically centered on board)
-    this.piecesText = scene.add.text(boardRight + 40, boardCenterY - 40, '', {
+    this.piecesText = scene.add.text(boardRight + 35, boardCenterY - 80, '', {
       ...BASE_STYLE,
-      fontSize: '16px',
+      fontSize: '18px',
+      fontStyle: 'bold',
       color: '#00ffff',
     }).setOrigin(0, 0);
 
-    // Pairs/entangle info (below pieces)
-    this.pairsText = scene.add.text(boardRight + 40, boardCenterY + 30, '', {
+    // Pairs/entangle info (below pieces with good spacing)
+    this.pairsText = scene.add.text(boardRight + 35, boardCenterY + 40, '', {
       ...BASE_STYLE,
-      fontSize: '14px',
+      fontSize: '16px',
       color: '#ffff00',
     }).setOrigin(0, 0);
 
     // Bottom center: Controls and tutorial (larger and more readable)
-    this.hintText = scene.add.text(cx, scene.scale.height - 60, '', {
+    this.hintText = scene.add.text(cx, scene.scale.height - 65, '', {
       ...BASE_STYLE,
-      fontSize: '16px',
+      fontSize: '18px',
       color: '#aaaacc',
-    }).setOrigin(0.5, 0);
-    this.createFrameBox(cx - 420, scene.scale.height - 75, 840, 60, 0xaaaacc);
+    }).setOrigin(0.5, 0.5);
+    this.createFrameBox(cx - 450, scene.scale.height - 85, 900, 70, 0xaaaacc);
   }
 
   private createFrameBox(x: number, y: number, w: number, h: number, color: number): void {
