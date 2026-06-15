@@ -63,7 +63,9 @@ export class BootScene extends Phaser.Scene {
     const subtitle = this.add.text(cx, cy + 70, 'A Game of Quantum Strategy', {
       fontFamily: 'monospace',
       fontSize: '18px',
-      color: '#00ffff',
+      color: '#ffffff',
+      stroke: '#00ffff',
+      strokeThickness: 1,
       align: 'center',
     });
     subtitle.setOrigin(0.5, 0.5);
