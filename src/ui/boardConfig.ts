@@ -8,7 +8,7 @@ export interface BoardConfig {
 // Create board config centered on viewport, ~60% width
 export function createBoardConfig(viewportWidth: number, viewportHeight: number): BoardConfig {
   const boardSize = 8;
-  const boardWidthRatio = 0.6;  // Board is 60% of viewport width
+  const boardWidthRatio = 0.8;  // Board is 80% of viewport width
   const boardWidth = viewportWidth * boardWidthRatio;
   const cellSize = boardWidth / boardSize;
   const boardHeight = cellSize * boardSize;

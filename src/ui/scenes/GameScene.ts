@@ -17,7 +17,6 @@ interface PairInfo { cellA: number; cellB: number; pairType: PairType }
 
 export class GameScene extends Phaser.Scene {
   private aurora!: AuroraBackground;
-  // private constellation!: Constellation;
   private board!:  BoardRenderer;
   private boardConfig!: BoardConfig;
   private pieces!: Map<number, PieceSprite>;
@@ -46,7 +45,6 @@ export class GameScene extends Phaser.Scene {
     this.boardConfig = createBoardConfig(this.scale.width, this.scale.height);
 
     this.aurora = new AuroraBackground();
-    // this.constellation = new Constellation(this, { starCount: 14, connectionDistance: 160, starSize: 2.5 });
     this.board  = new BoardRenderer(this, this.boardConfig);
     this.hud    = new HUD(this, this.scale.width, this.boardConfig);
 
@@ -86,7 +84,6 @@ export class GameScene extends Phaser.Scene {
       this.input.off('pointerdown', this.handlePointer, this);
       gameManager.destroy();
       this.aurora.destroy();
-      // this.constellation.destroy();
       this.knownPairs.clear();
     });
   }
