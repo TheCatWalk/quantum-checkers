@@ -30,15 +30,16 @@ export class HUD {
     }).setOrigin(0.5, 0.5);
     this.createFrameBox(cx - 280, 12, 560, 50, 0x00ffff, false);
 
-    // Right side: Pieces and captures (vertically centered on board)
-    this.piecesText = scene.add.text(boardRight + 40, boardCenterY - 90, '', {
+    // Right side: Pieces and captures. pairsText is repositioned in update()
+    // to sit directly below piecesText, so the two never overlap.
+    this.piecesText = scene.add.text(boardRight + 40, boardCenterY - 115, '', {
       ...BASE_STYLE,
       fontSize: '18px',
       fontStyle: 'bold',
       color: '#00ffff',
     }).setOrigin(0, 0);
 
-    // Pairs/entangle info (below pieces with good spacing)
+    // Pairs/entangle info (y set dynamically below pieces in update()).
     this.pairsText = scene.add.text(boardRight + 40, boardCenterY + 50, '', {
       ...BASE_STYLE,
       fontSize: '16px',
@@ -48,7 +49,7 @@ export class HUD {
     // Add dark background for right side info
     const rightBg = this.scene.add.graphics();
     rightBg.fillStyle(0x000000, 0.25);
-    rightBg.fillRect(boardRight + 25, boardCenterY - 110, 200, 200);
+    rightBg.fillRect(boardRight + 25, boardCenterY - 130, 250, 260);
 
     // Bottom center: Controls and tutorial (larger and more readable)
     this.hintText = scene.add.text(cx, scene.scale.height - 65, '', {
@@ -113,7 +114,7 @@ export class HUD {
       // Pair summary - verbose format
       const p0Pairs = state.pairs.filter(p => p.owner === 0).length;
       const p1Pairs = state.pairs.filter(p => p.owner === 1).length;
-      let pairInfo = `ENTANGLED PAIRS - P1: ${p0Pairs}  P2: ${p1Pairs}`;
+      let pairInfo = `ENTANGLED PAIRS\nP1: ${p0Pairs}   P2: ${p1Pairs}`;
       if (state.pairs.length > 0) {
         const pairStr = state.pairs.map(p =>
           `${p.pairType === 'safe' ? '●' : '◆'} ${p.turnsRemaining}t`
@@ -135,5 +136,8 @@ export class HUD {
     const captured0 = 12 - p1Total;
     const captured1 = 12 - p0Total;
     this.piecesText.setText(`PIECES REMAINING\nPlayer 1: ${p0Total} / 12\nPlayer 2: ${p1Total} / 12\n\nCAPTURED\nPlayer 1: ${captured1}\nPlayer 2: ${captured0}`);
+
+    // Keep the (yellow) pairs block directly below the (blue) pieces block.
+    this.pairsText.setY(this.piecesText.y + this.piecesText.height + 14);
   }
 }
